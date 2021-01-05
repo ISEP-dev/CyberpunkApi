@@ -86,6 +86,14 @@ class Cyberpunk {
         }
         await dal.updateJobToComplete(job.id);
     }
+
+    async createJobAsync(fixer, title, description, henchmenCount, reward) {
+        const dal = new Dal();
+        if (reward <= 0) {
+            throw new BadrequestError(`Sorry the reward must be higher than 0 !`);
+        }
+        await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
+    }
 }
 
 export const cyberpunk = new Cyberpunk();

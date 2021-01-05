@@ -87,6 +87,20 @@ app.get('/jobs', async (req, res) => {
     }
 })
 
+app.post('/jobs', async (req, res) => {
+    try {
+        const { fixer, title, description, henchmenCount, reward } = req.query;
+        await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
+        return res.status(200).end();
+    } catch (err) {
+        if (err instanceof UnavaibleError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof BadrequestError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 app.post('/jobs/complete/:idJob/:idMerc', async (req, res) => {
     try {
         const {idJob, idMerc } = req.params;

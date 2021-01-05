@@ -99,6 +99,21 @@ class Dal {
         }
     }
 
+    async createJobAsync(fixer, title, description, henchmenCount, reward) {
+        const connection = await this.connect();
+        try {
+            const properties = 'fixer, title, description, henchmenCount, reward';
+            const values = [`'${fixer}'`, `'${title}'`, `'${description}'`, henchmenCount, reward].join(',');
+
+            const queryString = `INSERT INTO Jobs (${properties}) VALUES (${values})`;
+            await connection.query(queryString);
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const connection = await this.connect();
         try {
