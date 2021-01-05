@@ -15,6 +15,15 @@ class Cyberpunk {
         return mercs;
     }
 
+    async getAllWeaponsAsync() {
+        const dal = new Dal();
+        const weapons = await dal.getAllWeaponsAsync();
+        if (!weapons.length) {
+            throw new NotfoundError("Sorry, no weapons was found");
+        }
+        return weapons;
+    }
+
     async getMercByIdAsync(idMerc) {
         const dal = new Dal();
         const merc = await dal.getMercByIdAsync(idMerc);

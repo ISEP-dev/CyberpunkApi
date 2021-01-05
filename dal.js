@@ -27,6 +27,18 @@ class Dal {
         }
     }
 
+    async getAllWeaponsAsync() {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`SELECT * FROM Weapons`)
+            return result
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
     async getMercByIdAsync(idMerc) {
         const connection = await this.connect()
         try {
