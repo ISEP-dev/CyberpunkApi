@@ -1,5 +1,6 @@
 import Dal from "./dal";
 import NotfoundError from "./errors/notfound.error";
+import BadrequestError from "./errors/badrequest.error";
 
 class Cyberpunk {
     constructor() {
@@ -32,6 +33,13 @@ class Cyberpunk {
         return weapon;
     }
 
+    async createMercAsync(nickname, legalAge) {
+        if (legalAge <= 0) {
+            throw new BadrequestError(`Sorry, age must be higher than 0`);
+        }
+        const dal = new Dal();
+        await dal.createMercAsync(nickname, legalAge);
+    }
 
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const dal = new Dal();

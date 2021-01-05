@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import {cyberpunk} from "./cyberpunk";
 import UnavaibleError from "./errors/unavaible.error";
 import NotfoundError from "./errors/notfound.error";
+import BadrequestError from "./errors/badrequest.error";
 
 const app = express()
 
@@ -41,6 +42,20 @@ app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
         if (err instanceof UnavaibleError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
+app.post('/mercs/:nickname/:legalAge', async (req, res) => {
+    try {
+        const {nickname, legalAge } = req.params;
+        await cyberpunk.createMercAsync(nickname, legalAge);
+        return res.status(200).end();
+    } catch (err) {
+        if (err instanceof UnavaibleError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof BadrequestError) {
             return res.status(err.status).send(err.message).end();
         }
     }

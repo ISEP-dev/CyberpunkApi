@@ -51,6 +51,18 @@ class Dal {
         }
     }
 
+    async createMercAsync(nickname, legalAge) {
+        const connection = await this.connect();
+        try {
+            const queryString = `INSERT INTO Mercs (nickname, legalAge) VALUES ('${nickname}', '${legalAge}')`;
+            await connection.query(queryString);
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const connection = await this.connect();
         try {
