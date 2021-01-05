@@ -24,6 +24,15 @@ class Cyberpunk {
         return weapons;
     }
 
+    async getAllJobsAsync() {
+        const dal = new Dal();
+        const jobs = await dal.getAllJobsAsync();
+        if (!jobs.length) {
+            throw new NotfoundError("Sorry, no jobs was found");
+        }
+        return jobs;
+    }
+
     async getMercByIdAsync(idMerc) {
         const dal = new Dal();
         const merc = await dal.getMercByIdAsync(idMerc);

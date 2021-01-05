@@ -74,5 +74,18 @@ app.get('/weapons', async (req, res) => {
     }
 })
 
+app.get('/jobs', async (req, res) => {
+    try {
+        const jobs = await cyberpunk.getAllJobsAsync();
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobs);
+    } catch (err) {
+        if (err instanceof UnavaibleError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 
 export default app

@@ -39,6 +39,18 @@ class Dal {
         }
     }
 
+    async getAllJobsAsync() {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`SELECT * FROM Jobs`)
+            return result
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
     async getMercByIdAsync(idMerc) {
         const connection = await this.connect()
         try {
