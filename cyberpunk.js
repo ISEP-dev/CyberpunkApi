@@ -51,6 +51,15 @@ class Cyberpunk {
         return weapon;
     }
 
+    async getJobByIdAsync(idJob) {
+        const dal = new Dal();
+        const job = await dal.getJobByIdAsync(idJob);
+        if (!job) {
+            throw new NotfoundError(`Sorry, no job n°${idJob} was found`);
+        }
+        return job;
+    }
+
     async createMercAsync(nickname, legalAge) {
         if (legalAge <= 0) {
             throw new BadrequestError(`Sorry, age must be higher than 0`);
@@ -62,6 +71,20 @@ class Cyberpunk {
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const dal = new Dal();
         await dal.updateMercWeaponAsync(idMerc, idWeapon);
+    }
+
+    async updateMercEddiesAsync(merc, reward) {
+        const dal = new Dal();
+        const eddiesAfterJobCompleted = merc.eddies + reward;
+        await dal.updateMercEddiesAsync(merc.id, eddiesAfterJobCompleted);
+    }
+
+    async updateJobToComplete(job) {
+        const dal = new Dal();
+        if (!job.isAvailable) {
+            throw new BadrequestError(`Sorry the job n°${job.id} is already unavailable`);
+        }
+        await dal.updateJobToComplete(job.id);
     }
 }
 

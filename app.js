@@ -87,5 +87,25 @@ app.get('/jobs', async (req, res) => {
     }
 })
 
+app.post('/jobs/complete/:idJob/:idMerc', async (req, res) => {
+    try {
+        const {idJob, idMerc } = req.params;
+        const merc = await cyberpunk.getMercByIdAsync(idMerc);
+        const job = await cyberpunk.getJobByIdAsync(idJob);
+
+        await cyberpunk.updateJobToComplete(job);
+        await cyberpunk.updateMercEddiesAsync(merc, job.reward);
+        return res.status(200).end();
+    } catch (err) {
+        if (err instanceof UnavaibleError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof BadrequestError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 
 export default app
