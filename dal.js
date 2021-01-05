@@ -26,6 +26,42 @@ class Dal {
             connection.end()
         }
     }
+
+    async getMercByIdAsync(idMerc) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`SELECT * FROM Mercs WHERE id=${idMerc}`)
+            return result[0]
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
+    async getWeaponByIdAsync(idWeapon) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`SELECT * FROM Weapons WHERE id=${idWeapon}`)
+            return result[0]
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
+
+    async updateMercWeaponAsync(idMerc, idWeapon) {
+        const connection = await this.connect();
+        try {
+            const queryString = `UPDATE Mercs SET idWeapon=${idWeapon} WHERE id=${idMerc}`;
+            await connection.query(queryString)
+        } catch (err) {
+            throw UnavaibleError();
+        } finally {
+            connection.end()
+        }
+    }
 }
 
 export default Dal

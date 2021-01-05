@@ -30,5 +30,21 @@ app.get('/mercs', async (req, res) => {
     }
 })
 
+app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
+    try {
+        const {idWeapon, idMerc } = req.params;
+        await cyberpunk.getMercByIdAsync(idMerc);
+        await cyberpunk.getWeaponByIdAsync(idWeapon);
+        await cyberpunk.updateMercWeaponAsync(idMerc, idWeapon);
+        res.status(200).end();
+    } catch (err) {
+        if (err instanceof UnavaibleError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 
 export default app
