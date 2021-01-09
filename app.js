@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import {cyberpunk} from "./cyberpunk";
-import UnavaibleError from "./errors/unavaible.error";
+import UnavailableError from "./errors/unavailable.error";
 import NotfoundError from "./errors/notfound.error";
 import BadrequestError from "./errors/badrequest.error";
 
@@ -23,7 +23,7 @@ app.get('/mercs', async (req, res) => {
         const mercs = await cyberpunk.getAllMercsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercs);
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
@@ -39,7 +39,7 @@ app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
         await cyberpunk.updateMercWeaponAsync(idMerc, idWeapon);
         res.status(200).end();
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
@@ -53,7 +53,7 @@ app.post('/mercs/:nickname/:legalAge', async (req, res) => {
         await cyberpunk.createMercAsync(nickname, legalAge);
         return res.status(200).end();
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof BadrequestError) {
             return res.status(err.status).send(err.message).end();
@@ -66,7 +66,7 @@ app.get('/weapons', async (req, res) => {
         const weapons = await cyberpunk.getAllWeaponsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(weapons);
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
@@ -79,7 +79,7 @@ app.get('/jobs', async (req, res) => {
         const jobs = await cyberpunk.getAllJobsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobs);
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
@@ -93,7 +93,7 @@ app.post('/jobs', async (req, res) => {
         await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
         return res.status(200).end();
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof BadrequestError) {
             return res.status(err.status).send(err.message).end();
@@ -111,7 +111,7 @@ app.post('/jobs/complete/:idJob/:idMerc', async (req, res) => {
         await cyberpunk.updateMercEddiesAsync(merc, job.reward);
         return res.status(200).end();
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();

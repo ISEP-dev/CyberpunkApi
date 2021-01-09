@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'
-import UnavaibleError from "./errors/unavaible.error";
+import UnavailableError from "./errors/unavailable.error";
 
 class Dal {
     async connect() {
@@ -11,7 +11,7 @@ class Dal {
                 database: 'db_cyberpunk2077'
             })
         } catch (err) {
-            throw new UnavaibleError();
+            throw new UnavailableError();
         }
     }
 
@@ -21,7 +21,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Mercs`)
             return result
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -33,7 +33,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Weapons`)
             return result
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -45,7 +45,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Jobs`)
             return result
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -57,7 +57,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Mercs WHERE id=${idMerc}`)
             return result[0]
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -69,7 +69,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Weapons WHERE id=${idWeapon}`)
             return result[0]
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -81,7 +81,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM Jobs WHERE id=${idJob}`)
             return result[0]
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -93,7 +93,7 @@ class Dal {
             const queryString = `INSERT INTO Mercs (nickname, legalAge) VALUES ('${nickname}', '${legalAge}')`;
             await connection.query(queryString);
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -108,7 +108,7 @@ class Dal {
             const queryString = `INSERT INTO Jobs (${properties}) VALUES (${values})`;
             await connection.query(queryString);
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -120,7 +120,7 @@ class Dal {
             const queryString = `UPDATE Mercs SET idWeapon=${idWeapon} WHERE id=${idMerc}`;
             await connection.query(queryString)
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -132,7 +132,7 @@ class Dal {
             const queryString = `UPDATE Mercs SET eddies=${eddies} WHERE id=${idMerc}`;
             await connection.query(queryString)
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
@@ -144,7 +144,7 @@ class Dal {
             const queryString = `UPDATE Jobs SET isAvailable=${0} WHERE id=${idJob}`;
             await connection.query(queryString)
         } catch (err) {
-            throw UnavaibleError();
+            throw UnavailableError();
         } finally {
             connection.end()
         }
