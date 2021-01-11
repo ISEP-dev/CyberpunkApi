@@ -20,7 +20,7 @@ app.use(function (_req, res, next) {
 
 app.get('/mercs', async (req, res) => {
     try {
-        const mercs = await cyberpunk.getAllMercsAsync();
+        const mercs = await cyberpunk().getAllMercsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercs);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -34,7 +34,7 @@ app.get('/mercs', async (req, res) => {
 app.put('/mercs/weapons', async (req, res) => {
     try {
         const { idWeapon, idMerc } = req.body;
-        await cyberpunk.updateMercWeaponAsync(idMerc, idWeapon);
+        await cyberpunk().updateMercWeaponAsync(idMerc, idWeapon);
         res.status(200).end();
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -48,7 +48,7 @@ app.put('/mercs/weapons', async (req, res) => {
 app.post('/mercs', async (req, res) => {
     try {
         const {nickname, legalAge } = req.body;
-        const mercCreated = await cyberpunk.createMercAsync(nickname, legalAge);
+        const mercCreated = await cyberpunk().createMercAsync(nickname, legalAge);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -61,7 +61,7 @@ app.post('/mercs', async (req, res) => {
 
 app.get('/weapons', async (req, res) => {
     try {
-        const weapons = await cyberpunk.getAllWeaponsAsync();
+        const weapons = await cyberpunk().getAllWeaponsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(weapons);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -74,7 +74,7 @@ app.get('/weapons', async (req, res) => {
 
 app.get('/jobs', async (req, res) => {
     try {
-        const jobs = await cyberpunk.getAllJobsAsync();
+        const jobs = await cyberpunk().getAllJobsAsync();
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobs);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -88,7 +88,7 @@ app.get('/jobs', async (req, res) => {
 app.post('/jobs', async (req, res) => {
     try {
         const { fixer, title, description, henchmenCount, reward } = req.body;
-        const jobCreated = await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
+        const jobCreated = await cyberpunk().createJobAsync(fixer, title, description, henchmenCount, reward);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -102,8 +102,8 @@ app.post('/jobs', async (req, res) => {
 app.post('/jobs/complete', async (req, res) => {
     try {
         const { idJob, idMerc } = req.body;
-        const jobToComplete = await cyberpunk.updateMercEddiesAsync(idMerc, idJob);
-        await cyberpunk.updateJobToComplete(jobToComplete);
+        const jobToComplete = await cyberpunk().updateMercEddiesAsync(idMerc, idJob);
+        await cyberpunk().updateJobToComplete(jobToComplete);
         return res.status(200).end();
     } catch (err) {
         if (err instanceof UnavailableError) {

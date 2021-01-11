@@ -104,4 +104,5 @@ class Cyberpunk {
     }
 }
 
-export const cyberpunk = new Cyberpunk();
+const cyb = new Cyberpunk();
+export let cyberpunk = () => cyb
