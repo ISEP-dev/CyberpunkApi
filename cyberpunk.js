@@ -65,18 +65,25 @@ class Cyberpunk {
             throw new BadrequestError(`Sorry, age must be higher than 0`);
         }
         const dal = new Dal();
-        return await dal.createMercAsync(nickname, legalAge);
+        const mercId = await dal.createMercAsync(nickname, legalAge);
+        return await this.getMercByIdAsync(mercId);
     }
 
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const dal = new Dal();
+        await this.getMercByIdAsync(idMerc);
+        await this.getWeaponByIdAsync(idWeapon);
         await dal.updateMercWeaponAsync(idMerc, idWeapon);
     }
 
-    async updateMercEddiesAsync(merc, reward) {
+    async updateMercEddiesAsync(idMerc, idJob) {
+        const merc = await this.getMercByIdAsync(idMerc);
+        const job = await this.getJobByIdAsync(idJob);
+
         const dal = new Dal();
-        const eddiesAfterJobCompleted = merc.eddies + reward;
+        const eddiesAfterJobCompleted = merc.eddies + job.reward;
         await dal.updateMercEddiesAsync(merc.id, eddiesAfterJobCompleted);
+        return job;
     }
 
     async updateJobToComplete(job) {
@@ -92,7 +99,8 @@ class Cyberpunk {
         if (reward <= 0) {
             throw new BadrequestError(`Sorry the reward must be higher than 0 !`);
         }
-        return await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
+        const jobId = await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
+        return await this.getJobByIdAsync(jobId);
     }
 }
 

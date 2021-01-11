@@ -31,11 +31,9 @@ app.get('/mercs', async (req, res) => {
     }
 })
 
-app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
+app.put('/mercs/weapons', async (req, res) => {
     try {
-        const {idWeapon, idMerc } = req.params;
-        await cyberpunk.getMercByIdAsync(idMerc);
-        await cyberpunk.getWeaponByIdAsync(idWeapon);
+        const { idWeapon, idMerc } = req.body;
         await cyberpunk.updateMercWeaponAsync(idMerc, idWeapon);
         res.status(200).end();
     } catch (err) {
@@ -50,8 +48,7 @@ app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
 app.post('/mercs', async (req, res) => {
     try {
         const {nickname, legalAge } = req.body;
-        const mercIdCreated = await cyberpunk.createMercAsync(nickname, legalAge);
-        const mercCreated = await cyberpunk.getMercByIdAsync(mercIdCreated);
+        const mercCreated = await cyberpunk.createMercAsync(nickname, legalAge);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -91,8 +88,7 @@ app.get('/jobs', async (req, res) => {
 app.post('/jobs', async (req, res) => {
     try {
         const { fixer, title, description, henchmenCount, reward } = req.body;
-        const jobIdCreated = await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
-        const jobCreated = await cyberpunk.getJobByIdAsync(jobIdCreated);
+        const jobCreated = await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
@@ -106,11 +102,8 @@ app.post('/jobs', async (req, res) => {
 app.post('/jobs/complete', async (req, res) => {
     try {
         const { idJob, idMerc } = req.body;
-        const merc = await cyberpunk.getMercByIdAsync(idMerc);
-        const job = await cyberpunk.getJobByIdAsync(idJob);
-
-        await cyberpunk.updateJobToComplete(job);
-        await cyberpunk.updateMercEddiesAsync(merc, job.reward);
+        const jobToComplete = await cyberpunk.updateMercEddiesAsync(idMerc, idJob);
+        await cyberpunk.updateJobToComplete(jobToComplete);
         return res.status(200).end();
     } catch (err) {
         if (err instanceof UnavailableError) {
