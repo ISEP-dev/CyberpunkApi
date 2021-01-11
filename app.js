@@ -103,9 +103,9 @@ app.post('/jobs', async (req, res) => {
     }
 })
 
-app.post('/jobs/complete/:idJob/:idMerc', async (req, res) => {
+app.post('/jobs/complete', async (req, res) => {
     try {
-        const {idJob, idMerc } = req.params;
+        const { idJob, idMerc } = req.body;
         const merc = await cyberpunk.getMercByIdAsync(idMerc);
         const job = await cyberpunk.getJobByIdAsync(idJob);
 
