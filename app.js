@@ -89,7 +89,7 @@ app.get('/jobs', async (req, res) => {
 
 app.post('/jobs', async (req, res) => {
     try {
-        const { fixer, title, description, henchmenCount, reward } = req.query;
+        const { fixer, title, description, henchmenCount, reward } = req.body;
         await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
         return res.status(200).end();
     } catch (err) {
