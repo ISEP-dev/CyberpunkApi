@@ -91,8 +91,9 @@ app.get('/jobs', async (req, res) => {
 app.post('/jobs', async (req, res) => {
     try {
         const { fixer, title, description, henchmenCount, reward } = req.body;
-        await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
-        return res.status(200).end();
+        const jobIdCreated = await cyberpunk.createJobAsync(fixer, title, description, henchmenCount, reward);
+        const jobCreated = await cyberpunk.getJobByIdAsync(jobIdCreated);
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(jobCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();

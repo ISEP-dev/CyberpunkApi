@@ -92,7 +92,7 @@ class Cyberpunk {
         if (reward <= 0) {
             throw new BadrequestError(`Sorry the reward must be higher than 0 !`);
         }
-        await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
+        return await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
     }
 }
 
