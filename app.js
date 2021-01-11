@@ -47,11 +47,12 @@ app.put('/mercs/weapons/:idMerc/:idWeapon', async (req, res) => {
     }
 })
 
-app.post('/mercs/:nickname/:legalAge', async (req, res) => {
+app.post('/mercs', async (req, res) => {
     try {
-        const {nickname, legalAge } = req.params;
-        await cyberpunk.createMercAsync(nickname, legalAge);
-        return res.status(200).end();
+        const {nickname, legalAge } = req.body;
+        const mercIdCreated = await cyberpunk.createMercAsync(nickname, legalAge);
+        const mercCreated = await cyberpunk.getMercByIdAsync(mercIdCreated);
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercCreated);
     } catch (err) {
         if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();

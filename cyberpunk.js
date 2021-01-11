@@ -65,7 +65,7 @@ class Cyberpunk {
             throw new BadrequestError(`Sorry, age must be higher than 0`);
         }
         const dal = new Dal();
-        await dal.createMercAsync(nickname, legalAge);
+        return await dal.createMercAsync(nickname, legalAge);
     }
 
     async updateMercWeaponAsync(idMerc, idWeapon) {

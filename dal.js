@@ -91,7 +91,8 @@ class Dal {
         const connection = await this.connect();
         try {
             const queryString = `INSERT INTO Mercs (nickname, legalAge) VALUES ('${nickname}', '${legalAge}')`;
-            await connection.query(queryString);
+            const [res] = await connection.query(queryString);
+            return res.insertId;
         } catch (err) {
             throw UnavailableError();
         } finally {
