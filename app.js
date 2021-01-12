@@ -72,6 +72,20 @@ app.get('/weapons', async (req, res) => {
     }
 })
 
+app.get("/weapons/:idWeapon", async (req, res) => {
+    try {
+        const { idWeapon } = req.params;
+        const weapon = await cyberpunk().getWeaponByIdAsync(idWeapon);
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(weapon);
+    } catch (err) {
+        if (err instanceof UnavailableError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 app.get('/jobs', async (req, res) => {
     try {
         const jobs = await cyberpunk().getAllJobsAsync();

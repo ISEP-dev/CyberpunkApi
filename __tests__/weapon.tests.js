@@ -29,4 +29,17 @@ describe('Weapon actions :', () => {
         expect(res.body).toEqual(expectedResponseBody)
         expect(getAllWeaponsAsync).toHaveBeenCalledTimes(1)
     })
+
+    it('Get weapon by id', async () => {
+        const expectedResponseBody = weaponMock1;
+        const getWeaponByIdAsync = jest.fn().mockReturnValue(expectedResponseBody);
+
+        t.cyberpunk.mockReturnValue({ getWeaponByIdAsync });
+
+        const res = await request(app).get(`/weapons/${weaponMock1.id}`);
+        expect(res.status).toBe(200)
+        expect(res.body).toEqual(expectedResponseBody)
+        expect(getWeaponByIdAsync).toHaveBeenCalledTimes(1)
+        expect(getWeaponByIdAsync).toHaveBeenCalledWith(weaponMock1.id.toString())
+    })
 })
