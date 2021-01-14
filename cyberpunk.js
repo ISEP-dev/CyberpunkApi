@@ -71,9 +71,12 @@ class Cyberpunk {
 
     async updateMercWeaponAsync(idMerc, idWeapon) {
         const dal = new Dal();
-        await this.getMercByIdAsync(idMerc);
-        await this.getWeaponByIdAsync(idWeapon);
-        await dal.updateMercWeaponAsync(idMerc, idWeapon);
+        const merc = await this.getMercByIdAsync(idMerc);
+        const weapon = await this.getWeaponByIdAsync(idWeapon);
+        if (merc.eddies >= weapon.price) {
+            await dal.updateMercWeaponAsync(idMerc, idWeapon);
+            await dal.updateMercEddiesAsync(idMerc, merc.eddies - weapon.price);
+        }
     }
 
     async updateMercEddiesAsync(idMerc, idJob) {
