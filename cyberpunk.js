@@ -12,8 +12,21 @@ class Cyberpunk {
         if (!mercs.length) {
             throw new NotfoundError("Sorry, no mercs was found");
         }
+
         return mercs;
     }
+
+    async prepareWeaponForMercsAsync(mercs) {
+        const mercsWithWeaponPromises = Promise.all(
+            mercs.map(async merc => ({
+                ...merc,
+                weapon: await this.getWeaponByIdAsync(merc.idWeapon)
+            })
+        ));
+
+        return await mercsWithWeaponPromises;
+    }
+
 
     async getAllWeaponsAsync() {
         const dal = new Dal();
