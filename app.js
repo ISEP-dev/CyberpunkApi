@@ -1,6 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import {cyberpunk} from "./cyberpunk";
+import * as wt from "worker_threads";
 import UnavailableError from "./errors/unavailable.error";
 import NotfoundError from "./errors/notfound.error";
 import BadrequestError from "./errors/badrequest.error";
@@ -130,5 +131,28 @@ app.post('/jobs/complete', async (req, res) => {
     }
 })
 
+app.get('/jobs/fight/process/:idJob/:idMerc', async (req, res) => {
+    try {
+        const { idJob, idMerc } = req.params;
+        const job = await cyberpunk().getJobByIdAsync(idJob);
+        const merc = await cyberpunk().getMercByIdAsync(idMerc);
+        const weapon = await cyberpunk().getWeaponByIdAsync(merc.idWeapon);
+
+        res.set({ 'Content-Type': 'text/event-stream', 'Connection': 'keep-alive' });
+        res.flushHeaders();
+        res.write(`data: Job started (${job.reward}€$ in game) ! \n\n`);
+
+        const channel = new wt.Worker('./fight-service.worker.mjs', {
+            workerData: { merc, weapon, job }
+        });
+        channel.postMessage("");
+
+        channel.on('message', (comment) => res.write(`data: ${(comment)}\n\n`));
+        channel.on('exit', _ => res.write(`type: close`));
+        channel.on('error', _ => res.write(`type: close`));
+    } catch (err) {
+        return res.status(err.status).send(err.message).end();
+    }
+});
 
 export default app
