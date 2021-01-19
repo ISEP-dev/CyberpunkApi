@@ -89,6 +89,13 @@ class Cyberpunk {
         return job;
     }
 
+    async killMercAsync(idMerc) {
+        await this.getMercByIdAsync(idMerc);
+
+        const dal = new Dal();
+        await dal.killMercAsync(idMerc);
+    }
+
     async updateJobToComplete(job) {
         const dal = new Dal();
         if (!job.isAvailable) {

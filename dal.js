@@ -140,6 +140,18 @@ class Dal {
         }
     }
 
+    async killMercAsync(idMerc) {
+        const connection = await this.connect();
+        try {
+            const queryString = `DELETE FROM Mercs WHERE id=${idMerc}`;
+            await connection.query(queryString)
+        } catch (e) {
+            throw UnavailableError();
+        } finally {
+            connection.end()
+        }
+    }
+
     async updateJobToComplete(idJob) {
         const connection = await this.connect();
         try {

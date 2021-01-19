@@ -59,6 +59,21 @@ app.post('/mercs', async (req, res) => {
     }
 })
 
+app.delete("/mercs", async (req, res) => {
+    console.log(req)
+    const { idMerc } = req.body;
+    try {
+        await cyberpunk().killMercAsync(idMerc)
+        return res.status(200).end()
+    } catch (err) {
+        if (err instanceof UnavailableError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof BadrequestError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
 app.get('/weapons', async (req, res) => {
     try {
         const weapons = await cyberpunk().getAllWeaponsAsync();
