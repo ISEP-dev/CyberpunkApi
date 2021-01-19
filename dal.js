@@ -143,7 +143,7 @@ class Dal {
     async killMercAsync(idMerc) {
         const connection = await this.connect();
         try {
-            const queryString = `DELETE FROM Mercs WHERE id=${idMerc}`;
+            const queryString = `UPDATE Mercs SET isAlive=${0} WHERE id=${idMerc}`;
             await connection.query(queryString)
         } catch (e) {
             throw UnavailableError();

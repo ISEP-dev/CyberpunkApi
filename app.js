@@ -74,8 +74,8 @@ app.post('/mercs', async (req, res) => {
     }
 })
 
-app.delete("/mercs", async (req, res) => {
-    const { idMerc } = req.body;
+app.delete("/mercs/:idMerc", async (req, res) => {
+    const { idMerc } = req.params;
     try {
         await cyberpunk().killMercAsync(idMerc)
         return res.status(200).end()
