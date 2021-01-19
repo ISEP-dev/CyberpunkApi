@@ -48,11 +48,20 @@ class Cyberpunk {
 
     async getMercByIdAsync(idMerc) {
         const dal = new Dal();
+        if (!idMerc) {
+            throw new NotfoundError(`Sorry, no merc n°${idMerc} was found`);
+        }
+
         const merc = await dal.getMercByIdAsync(idMerc);
         if (!merc) {
             throw new NotfoundError(`Sorry, no merc n°${idMerc} was found`);
         }
-        return merc;
+
+        const weapon = await this.getWeaponByIdAsync(merc.idWeapon);
+        return {
+            ...merc,
+            weapon
+        }
     }
 
     async getWeaponByIdAsync(idWeapon) {
