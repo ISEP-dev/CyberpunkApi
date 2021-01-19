@@ -21,7 +21,22 @@ app.use(function (_req, res, next) {
 app.get('/mercs', async (req, res) => {
     try {
         const mercs = await cyberpunk().getAllMercsAsync();
-        return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercs);
+        const mercsWithWeapon = await cyberpunk().prepareWeaponForMercsAsync(mercs);
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercsWithWeapon);
+    } catch (err) {
+        if (err instanceof UnavailableError) {
+            return res.status(err.status).send(err.message).end();
+        } else if (err instanceof NotfoundError) {
+            return res.status(err.status).send(err.message).end();
+        }
+    }
+})
+
+app.get('/mercs/:idMerc', async (req, res) => {
+    try {
+        const { idMerc } = req.params;
+        const merc = await cyberpunk().getMercByIdAsync(idMerc);
+        return res.status(200).set({ 'Content-Type': 'application/json' }).json(merc);
     } catch (err) {
         if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
@@ -47,7 +62,7 @@ app.put('/mercs/weapons', async (req, res) => {
 
 app.post('/mercs', async (req, res) => {
     try {
-        const {nickname, legalAge } = req.body;
+        const { nickname, legalAge } = req.body;
         const mercCreated = await cyberpunk().createMercAsync(nickname, legalAge);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(mercCreated);
     } catch (err) {
