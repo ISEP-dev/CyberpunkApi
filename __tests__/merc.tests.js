@@ -4,7 +4,7 @@ import app from '../app'
 import * as t from '../cyberpunk';
 
 import {weaponMock1} from "../mocks/weapon.mocks";
-import {mockMerc1} from "../mocks/merc.mocks";
+import {mockMerc1, mockMerc1WithWeapon} from "../mocks/merc.mocks";
 
 jest.mock('../dal.js', () => {
     return jest.fn().mockImplementation(() => ({
@@ -21,6 +21,7 @@ jest.mock('../dal.js', () => {
 beforeEach(() => {
     t.cyberpunk = jest.fn().mockReturnValue({
         getAllMercsAsync: jest.fn(),
+        prepareWeaponForMercsAsync: jest.fn(),
         getWeaponByIdAsync: jest.fn(),
         getMercByIdAsync: jest.fn(),
         createJobAsync: jest.fn(),
@@ -32,14 +33,18 @@ beforeEach(() => {
 describe('Merc actions :', () => {
     it('Get all mercs', async () => {
         const expectedResponseBody = [mockMerc1];
+        const expectedResponsePreparedMethodBody = [mockMerc1WithWeapon];
         const getAllMercsAsync = jest.fn().mockReturnValue(expectedResponseBody);
+        const prepareWeaponForMercsAsync = jest.fn().mockReturnValue(expectedResponsePreparedMethodBody);
 
-        t.cyberpunk.mockReturnValue({ getAllMercsAsync });
+        t.cyberpunk.mockReturnValue({ getAllMercsAsync, prepareWeaponForMercsAsync });
 
         const res = await request(app).get('/mercs');
         expect(res.status).toBe(200)
-        expect(res.body).toEqual(expectedResponseBody)
+        expect(res.body).toEqual(expectedResponsePreparedMethodBody)
         expect(getAllMercsAsync).toHaveBeenCalledTimes(1)
+        expect(prepareWeaponForMercsAsync).toHaveBeenCalledWith(expectedResponseBody)
+        expect(prepareWeaponForMercsAsync).toHaveBeenCalledTimes(1)
     })
 
     it('Create mercs', async () => {
