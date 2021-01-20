@@ -131,6 +131,11 @@ class Cyberpunk {
         if (reward <= 0) {
             throw new BadrequestError(`Sorry the reward must be higher than 0 !`);
         }
+
+        if (henchmenCount < 0) {
+            throw new BadrequestError(`Sorry the henchmen count must be higher or equal than 0 !`);
+        }
+
         const jobId = await dal.createJobAsync(fixer, title, description, henchmenCount, reward);
         return await this.getJobByIdAsync(jobId);
     }

@@ -104,7 +104,7 @@ class Dal {
         const connection = await this.connect();
         try {
             const properties = 'fixer, title, description, henchmenCount, reward';
-            const values = [`'${fixer}'`, `'${title}'`, `'${description}'`, henchmenCount, reward].join(',');
+            const values = [`'${fixer}'`, `'${title}'`, `'${description}'`, parseInt(henchmenCount), parseInt(reward)].join(',');
 
             const queryString = `INSERT INTO Jobs (${properties}) VALUES (${values})`;
             const [res] = await connection.query(queryString);
