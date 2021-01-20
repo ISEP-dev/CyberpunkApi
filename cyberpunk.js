@@ -47,11 +47,11 @@ class Cyberpunk {
     }
 
     async getMercByIdAsync(idMerc) {
-        const dal = new Dal();
         if (!idMerc) {
             throw new NotfoundError(`Sorry, no merc n°${idMerc} was found`);
         }
 
+        const dal = new Dal();
         const merc = await dal.getMercByIdAsync(idMerc);
         if (!merc) {
             throw new NotfoundError(`Sorry, no merc n°${idMerc} was found`);
@@ -65,6 +65,10 @@ class Cyberpunk {
     }
 
     async getWeaponByIdAsync(idWeapon) {
+        if (!idWeapon) {
+            throw new NotfoundError(`Sorry, no weapon n°${idWeapon} was found`);
+        }
+
         const dal = new Dal();
         const weapon = await dal.getWeaponByIdAsync(idWeapon);
         if (!weapon) {
@@ -95,10 +99,13 @@ class Cyberpunk {
         const dal = new Dal();
         const merc = await this.getMercByIdAsync(idMerc);
         const weapon = await this.getWeaponByIdAsync(idWeapon);
+
         if (merc.eddies >= weapon.price) {
-            await dal.updateMercWeaponAsync(idMerc, idWeapon);
-            await dal.updateMercEddiesAsync(idMerc, merc.eddies - weapon.price);
+            throw new BadrequestError(`Sorry the merc has not enough eddies to buy it`);
         }
+
+        await dal.updateMercWeaponAsync(idMerc, idWeapon);
+        await dal.updateMercEddiesAsync(idMerc, merc.eddies - weapon.price);
     }
 
     async updateMercEddiesAsync(idMerc, idJob) {
@@ -112,7 +119,10 @@ class Cyberpunk {
     }
 
     async killMercAsync(idMerc) {
-        await this.getMercByIdAsync(idMerc);
+        const merc = await this.getMercByIdAsync(idMerc);
+        if (!merc.isAlive) {
+            throw new BadrequestError(`Sorry the merc is already dead !`);
+        }
 
         const dal = new Dal();
         await dal.killMercAsync(idMerc);
