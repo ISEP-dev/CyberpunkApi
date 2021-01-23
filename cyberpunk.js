@@ -100,7 +100,7 @@ class Cyberpunk {
         const merc = await this.getMercByIdAsync(idMerc);
         const weapon = await this.getWeaponByIdAsync(idWeapon);
 
-        if (merc.eddies >= weapon.price) {
+        if (merc.eddies < weapon.price) {
             throw new BadrequestError(`Sorry the merc has not enough eddies to buy it`);
         }
 

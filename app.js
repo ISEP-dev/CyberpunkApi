@@ -56,6 +56,8 @@ app.put('/mercs/weapons', async (req, res) => {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
+        } else if (err instanceof BadrequestError) {
+            return res.status(err.status).send(err.message).end();
         }
     }
 })
